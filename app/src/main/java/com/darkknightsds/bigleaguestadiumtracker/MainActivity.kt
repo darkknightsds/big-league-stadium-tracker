@@ -1,17 +1,24 @@
 package com.darkknightsds.bigleaguestadiumtracker
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.darkknightsds.bigleaguestadiumtracker.account.AccountFragment
 import com.darkknightsds.bigleaguestadiumtracker.community.CommunityFragment
 import com.darkknightsds.bigleaguestadiumtracker.stadiums.StadiumsFragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    //Values
+    private val TAG: String = "MainActivity"
+    //Variables
+    private lateinit var auth: FirebaseAuth
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
                 val stadiumsFragment = StadiumsFragment()
@@ -36,7 +43,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+
+        auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            val loginFragment = LoginFragment()
+            loadFragment(loginFragment)
+        }
     }
 
     private fun loadFragment(fragment: Fragment) {
