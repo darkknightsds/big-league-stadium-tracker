@@ -13,23 +13,23 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     //Values
     private val TAG: String = "MainActivity"
+    private val stadiumsFragment = StadiumsFragment()
+    private val communityFragment = CommunityFragment()
+    private val accountFragment = ProfileFragment()
     //Variables
     private lateinit var auth: FirebaseAuth
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                val stadiumsFragment = StadiumsFragment()
                 loadFragment(stadiumsFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-                val communityFragment = CommunityFragment()
                 loadFragment(communityFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
-                val accountFragment = ProfileFragment()
                 loadFragment(accountFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
             val loginFragment = LoginFragment()
             loadFragment(loginFragment)
         } else {
-            val stadiumsFragment = StadiumsFragment()
             loadFragment(stadiumsFragment)
         }
     }
