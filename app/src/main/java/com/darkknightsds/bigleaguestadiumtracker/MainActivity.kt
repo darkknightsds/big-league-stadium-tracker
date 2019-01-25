@@ -1,15 +1,13 @@
 package com.darkknightsds.bigleaguestadiumtracker
 
 import android.os.Bundle
-import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.darkknightsds.bigleaguestadiumtracker.account.AccountFragment
+import com.darkknightsds.bigleaguestadiumtracker.profile.ProfileFragment
 import com.darkknightsds.bigleaguestadiumtracker.community.CommunityFragment
 import com.darkknightsds.bigleaguestadiumtracker.stadiums.StadiumsFragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
-                val accountFragment = AccountFragment()
+                val accountFragment = ProfileFragment()
                 loadFragment(accountFragment)
                 return@OnNavigationItemSelectedListener true
             }
@@ -50,6 +48,9 @@ class MainActivity : AppCompatActivity() {
         if (currentUser == null) {
             val loginFragment = LoginFragment()
             loadFragment(loginFragment)
+        } else {
+            val stadiumsFragment = StadiumsFragment()
+            loadFragment(stadiumsFragment)
         }
     }
 

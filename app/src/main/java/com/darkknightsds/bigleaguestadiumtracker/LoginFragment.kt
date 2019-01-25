@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.darkknightsds.bigleaguestadiumtracker.profile.ProfileFragment
 import com.darkknightsds.bigleaguestadiumtracker.stadiums.StadiumsFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -16,8 +17,9 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.*
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
 
 class LoginFragment : Fragment(), View.OnClickListener {
     //Values
@@ -26,6 +28,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
     //Variables
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
+    private lateinit var id: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,11 +94,43 @@ class LoginFragment : Fragment(), View.OnClickListener {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this.activity!!) { task ->
                 if (task.isSuccessful) {
-                    val fragment = StadiumsFragment()
-                    activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container,fragment).addToBackStack(null).commit()
+                    completeLogInProcess()
                 } else {
                     Log.d(TAG, "signInWithCredential:failure", task.exception)
                 }
             }
+    }
+
+    private fun completeLogInProcess() {
+        id = auth.currentUser!!.uid
+        database = FirebaseDatabase.getInstance().reference
+
+        database.child("users").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                println(error.message)
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.child(id).exists()){
+                    val fragment = StadiumsFragment()
+                    loadFragment(fragment)
+                } else {
+                    createNewDatabaseUser()
+                }
+            }
+        })
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        activity!!.supportFragmentManager.beginTransaction().remove(this).commit()
+        activity!!.supportFragmentManager.beginTransaction().replace(R.id.fragment_container,fragment).addToBackStack(null).commit()
+    }
+
+    private fun createNewDatabaseUser() {
+        val email = auth.currentUser!!.email
+        database.child("users").child(id).child("user_id").setValue(id)
+        database.child("users").child(id).child("user_email").setValue(email)
+        val fragment = ProfileFragment()
+        loadFragment(fragment)
     }
 }

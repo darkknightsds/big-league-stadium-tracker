@@ -1,4 +1,4 @@
-package com.darkknightsds.bigleaguestadiumtracker.account
+package com.darkknightsds.bigleaguestadiumtracker.profile
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -9,13 +9,13 @@ import android.view.ViewGroup
 import com.darkknightsds.bigleaguestadiumtracker.R
 
 
-class AccountFragment : Fragment() {
+class ProfileFragment : Fragment() {
 
     companion object {
-        fun newInstance() = AccountFragment()
+        fun newInstance() = ProfileFragment()
     }
 
-    private lateinit var viewModel: AccountViewModel
+    private lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +26,7 @@ class AccountFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AccountViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
