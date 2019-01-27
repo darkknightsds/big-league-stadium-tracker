@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import com.darkknightsds.bigleaguestadiumtracker.profile.ProfileFragment
 import com.darkknightsds.bigleaguestadiumtracker.stadiums.StadiumsFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -49,6 +50,11 @@ class LoginFragment : Fragment(), View.OnClickListener {
         googleSignInClient = GoogleSignIn.getClient(activity!!, gso)
 
         google_sign_in_button.setOnClickListener(this)
+
+        val archivoFont = ResourcesCompat.getFont(context!!.applicationContext, R.font.archivo_black_regular)
+        textView_bigLeague.typeface = archivoFont
+        textView_stadiumTracker.typeface = archivoFont
+        textView_signIn.typeface = archivoFont
     }
 
     override fun onClick(v: View) {
